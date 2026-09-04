@@ -4,4 +4,6 @@ setup azure resources using terraform
 - 2 subnets 
 - 1 virtual machine with username and password 
 
+Tips::: terraform destroy command delete all resource created using terraform command.
+
 https://registry.terraform.io/providers/hashicorp/azurerm/1.38.0/docs/resources/subnet
