@@ -1,0 +1,7 @@
+setup azure resources using terraform
+- resource group 
+- vnet 
+- 2 subnets 
+- 1 virtual machine with username and password 
+
+https://registry.terraform.io/providers/hashicorp/azurerm/1.38.0/docs/resources/subnet
