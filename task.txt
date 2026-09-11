@@ -1,0 +1,5 @@
+vnet 
+blob-storage 
+vm
+ssh-keys
+blob-storage-static-site
