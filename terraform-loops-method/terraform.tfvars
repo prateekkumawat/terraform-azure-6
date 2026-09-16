@@ -37,3 +37,22 @@ applicaiton_rules = {
     destination_address_prefix = "*"
   }
 }
+
+storage_accounts_multiname = ["storageappsstage", "storageprodprojectx", "storageappsaccounts"]
+
+storage_accounts_reuseable = {
+  "appsaccount1" = {
+    name                     = "appsaccount1"
+    resource_group_name      = "apps"
+    location                 = "Central India"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+  }
+  "appsaccount2" = {
+    name                     = "appsaccount2"
+    resource_group_name      = "apps"
+    location                 = "Central India"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+  }
+}

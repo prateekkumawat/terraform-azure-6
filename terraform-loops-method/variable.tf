@@ -15,3 +15,19 @@ variable "applicaiton_rules" {
     destination_address_prefix = optional(string)
 }))
 }
+
+variable "storage_accounts_multiname" {
+   type = list 
+}
+
+variable "storage_accounts_reuseable" {
+   type = map(object({
+    name                     = string
+    resource_group_name      = string
+    location                 = string
+    account_tier             = optional(string)
+    account_replication_type = string
+    access_tier              = optional(string)
+    allow_nested_items_to_be_public = optional(bool)
+   }))
+}
