@@ -1,7 +1,9 @@
 resource_locations = "Central India"
 resource_name = "hsit-apps"
+storage_account_count_enable = true
 storage_accounts_count = 2
 storage_accounts_name = "hsitappstorages"
+application_rules_enable = false
 applicaiton_rules = {
   "HTTP" = {
     name                       = "HTTP"
@@ -38,8 +40,10 @@ applicaiton_rules = {
   }
 }
 
+storage_accounts_multiname_enable = true
 storage_accounts_multiname = ["storageappsstage", "storageprodprojectx", "storageappsaccounts"]
 
+storage_accounts_reuseable_enable = true
 storage_accounts_reuseable = {
   "appsaccount1" = {
     name                     = "appsaccount1"

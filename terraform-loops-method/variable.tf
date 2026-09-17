@@ -1,7 +1,14 @@
 variable "resource_locations" {}
 variable "resource_name" {}
+variable "storage_account_count_enable" {
+  type = bool
+}
 variable "storage_accounts_count" {}
 variable "storage_accounts_name" {}
+variable "application_rules_enable" {
+   type = bool
+}
+
 variable "applicaiton_rules" {
   type = map(object({
     name                       = string
@@ -16,10 +23,16 @@ variable "applicaiton_rules" {
 }))
 }
 
+variable "storage_accounts_multiname_enable" {
+   type = bool
+}
 variable "storage_accounts_multiname" {
    type = list 
 }
 
+variable "storage_accounts_reuseable_enable"{
+   type = bool 
+} 
 variable "storage_accounts_reuseable" {
    type = map(object({
     name                     = string

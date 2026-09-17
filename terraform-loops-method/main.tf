@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_storage_account" "example" {
-  count                    = var.storage_accounts_count
+  count                    = var.storage_account_count_enable ? var.storage_accounts_count : 0
   name                     = "${var.storage_accounts_name}${count.index + 1}"
   resource_group_name      = azurerm_resource_group.example.name
   location                 = azurerm_resource_group.example.location
@@ -17,6 +17,7 @@ resource "azurerm_storage_account" "example" {
 }
 
 resource "azurerm_network_security_group" "example" {
+  count               = var.application_rules_enable ? 1 : 0
   name                = "acceptanceTestSecurityGroup1"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
@@ -41,7 +42,7 @@ resource "azurerm_network_security_group" "example" {
 }
 
 resource "azurerm_storage_account" "this1" {
-  for_each                 =  toset(var.storage_accounts_multiname)
+  for_each                 =  { for k ,v in toset(var.storage_accounts_multiname) : k => v if var.storage_accounts_multiname_enable } 
   name                     =  each.value
   resource_group_name      = azurerm_resource_group.example.name
   location                 = azurerm_resource_group.example.location
@@ -54,7 +55,8 @@ resource "azurerm_storage_account" "this1" {
 }
 
 resource "azurerm_storage_account" "this2" {
-  for_each                 =  var.storage_accounts_reuseable
+  
+  for_each                 =  { for k, v in var.storage_accounts_reuseable : k => v if var.storage_accounts_reuseable_enable }
   name                     =  each.value.name
   resource_group_name      =  each.value.resource_group_name
   location                 =  each.value.location
