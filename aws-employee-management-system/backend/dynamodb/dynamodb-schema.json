@@ -1,0 +1,48 @@
+{
+  "TableName": "Employees",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "empId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "department",
+      "AttributeType": "S"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "empId",
+      "KeyType": "HASH"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "DepartmentIndex",
+      "KeySchema": [
+        {
+          "AttributeName": "department",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+      }
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST",
+  "Tags": [
+    {
+      "Key": "Environment",
+      "Value": "Production"
+    },
+    {
+      "Key": "Project",
+      "Value": "EmployeeManagement"
+    }
+  ]
+}
