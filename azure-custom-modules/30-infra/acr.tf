@@ -1,6 +1,6 @@
 
 resource "azurerm_container_registry" "this" {
-  name                          = var.name
+  name                          = var.acr_name
   resource_group_name           = var.resource_group_name
   location                      = var.location
   sku                           = "Premium"
@@ -11,8 +11,8 @@ resource "azurerm_container_registry" "this" {
   tags                          = var.tags
 }
 
-resource "azurerm_private_endpoint" "this" {
-  name                = "pe-${var.name}"
+resource "azurerm_private_endpoint" "acr" {
+  name                = "pe-${var.acr_name}"
   resource_group_name = var.resource_group_name
   location            = var.location
   subnet_id           = var.private_endpoint_subnet_id
@@ -26,16 +26,14 @@ resource "azurerm_private_endpoint" "this" {
   }
   private_dns_zone_group {
     name                 = "default"
-    private_dns_zone_ids = [var.private_dns_zone_id]
+    private_dns_zone_ids = [var.private_dns_zone_ids["acr"]]
   }
 }
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
+resource "azurerm_monitor_diagnostic_setting" "acr" {
   name                       = "diag"
   target_resource_id         = azurerm_container_registry.this.id
   log_analytics_workspace_id = var.log_analytics_id
   enabled_log { category_group = "allLogs" }
   enabled_metric { category = "AllMetrics" }
 }
-
-

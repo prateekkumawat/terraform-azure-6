@@ -102,6 +102,12 @@ variable "postgres_ha_enabled" {
   default = true
 }
 
+variable "postgres_geo_redundant_backup_enabled" {
+  description = "Enable geo-redundant backups independently of zone-redundant high availability."
+  type        = bool
+  default     = false
+}
+
 variable "postgres_admin_group_name" {
   description = "Entra group display name set as Postgres admin"
   type        = string

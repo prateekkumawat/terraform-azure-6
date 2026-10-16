@@ -24,6 +24,9 @@ resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
   storage_account_id    = azurerm_storage_account.tfstate.id
   container_access_type = "private"
+  timeouts {
+    create = "10m" # fail fast instead of retrying for an hour
+  }
 }
 
 resource "azurerm_management_lock" "tfstate" {

@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "this" {
-  name                          = var.name
+  name                          = var.key_vault_name
   resource_group_name           = var.resource_group_name
   location                      = var.location
   tenant_id                     = var.tenant_id
@@ -16,8 +16,8 @@ resource "azurerm_key_vault" "this" {
   tags = var.tags
 }
 
-resource "azurerm_private_endpoint" "this" {
-  name                = "pe-${var.name}"
+resource "azurerm_private_endpoint" "keyvault" {
+  name                = "pe-${var.key_vault_name}"
   resource_group_name = var.resource_group_name
   location            = var.location
   subnet_id           = var.private_endpoint_subnet_id
@@ -31,16 +31,14 @@ resource "azurerm_private_endpoint" "this" {
   }
   private_dns_zone_group {
     name                 = "default"
-    private_dns_zone_ids = [var.private_dns_zone_id]
+    private_dns_zone_ids = [var.private_dns_zone_ids["keyvault"]]
   }
 }
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
+resource "azurerm_monitor_diagnostic_setting" "keyvault" {
   name                       = "diag"
   target_resource_id         = azurerm_key_vault.this.id
   log_analytics_workspace_id = var.log_analytics_id
   enabled_log { category_group = "audit" }
   enabled_metric { category = "AllMetrics" }
 }
-
-

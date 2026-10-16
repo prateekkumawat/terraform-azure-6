@@ -1,15 +1,15 @@
-variable "name" { 
-    type = string 
+variable "name" {
+  type = string
 }
-variable "resource_group_name" { 
-    type = string 
+variable "resource_group_name" {
+  type = string
 }
-variable "location" { 
-    type = string 
+variable "location" {
+  type = string
 }
-variable "retention_days" { 
-    type = number 
+variable "retention_days" {
+  type = number
 }
-variable "tags" { 
-    type = map(string) 
+variable "tags" {
+  type = map(string)
 }

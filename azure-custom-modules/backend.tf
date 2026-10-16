@@ -1,4 +1,4 @@
-# Partial config. Initialise with:
+# Initialise with:
 #   terraform init -backend-config="storage_account_name=<name>" -backend-config="key=prod.tfstate"
 terraform {
   backend "azurerm" {

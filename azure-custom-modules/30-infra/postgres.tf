@@ -1,17 +1,17 @@
 resource "azurerm_postgresql_flexible_server" "this" {
-  name                          = var.name
+  name                          = var.postgres_name
   resource_group_name           = var.resource_group_name
   location                      = var.location
-  version                       = var.pg_version
-  sku_name                      = var.sku_name
-  storage_mb                    = var.storage_mb
+  version                       = var.postgres_version
+  sku_name                      = var.postgres_sku
+  storage_mb                    = var.postgres_storage_mb
   auto_grow_enabled             = true
   zone                          = "1"
   delegated_subnet_id           = var.delegated_subnet_id
-  private_dns_zone_id           = var.private_dns_zone_id
+  private_dns_zone_id           = var.private_dns_zone_ids["postgres"]
   public_network_access_enabled = false
   backup_retention_days         = 35
-  geo_redundant_backup_enabled  = var.ha_enabled
+  geo_redundant_backup_enabled  = var.postgres_geo_redundant_backup_enabled
   tags                          = var.tags
 
   # No password: Entra ID authentication only (no secrets to store or rotate)
@@ -22,7 +22,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   }
 
   dynamic "high_availability" {
-    for_each = var.ha_enabled ? [1] : []
+    for_each = var.postgres_ha_enabled ? [1] : []
     content {
       mode                      = "ZoneRedundant"
       standby_availability_zone = "2"
@@ -45,8 +45,8 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "th
   server_name         = azurerm_postgresql_flexible_server.this.name
   resource_group_name = var.resource_group_name
   tenant_id           = var.tenant_id
-  object_id           = var.admin_group_object_id
-  principal_name      = var.admin_group_name
+  object_id           = var.postgres_admin_group_object_id
+  principal_name      = var.postgres_admin_group_name
   principal_type      = "Group"
 }
 
@@ -62,12 +62,10 @@ resource "azurerm_postgresql_flexible_server_configuration" "log_connections" {
   value     = "on"
 }
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
+resource "azurerm_monitor_diagnostic_setting" "postgres" {
   name                       = "diag"
   target_resource_id         = azurerm_postgresql_flexible_server.this.id
   log_analytics_workspace_id = var.log_analytics_id
   enabled_log { category_group = "allLogs" }
   enabled_metric { category = "AllMetrics" }
 }
-
-

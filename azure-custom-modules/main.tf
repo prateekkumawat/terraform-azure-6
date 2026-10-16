@@ -49,30 +49,20 @@ module "network" {
 }
 
 module "infra" {
-  source                     = "./30-infra/"
-  name                       = "kv-${var.workload}-${var.environment}-${random_string.uniq.result}"
-  resource_group_name        = azurerm_resource_group.this.name
-  location                   = var.location
+  source              = "./30-infra"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = var.location
+  tags                = local.tags
+
+  acr_name                   = "acr${var.workload}${var.environment}${random_string.uniq.result}"
+  aks_name                   = "aks-${local.suffix}"
+  key_vault_name             = "kv-${var.workload}-${var.environment}-${random_string.uniq.result}"
+  postgres_name              = "psql-${local.suffix}-${random_string.uniq.result}"
+  private_endpoint_subnet_id = module.network.pe_subnet_id
+  private_dns_zone_ids       = module.network.private_dns_zone_ids
+  log_analytics_id           = module.monitoring.workspace_id
   tenant_id                  = data.azurerm_client_config.current.tenant_id
-  private_endpoint_subnet_id = module.network.pe_subnet_id
-  private_dns_zone_id        = module.network.private_dns_zone_ids["keyvault"]
-  log_analytics_id           = module.monitoring.workspace_id
-  tags                       = local.tags
 
-  name                       = "acr${var.workload}${var.environment}${random_string.uniq.result}"
-  resource_group_name        = azurerm_resource_group.this.name
-  location                   = var.location
-  private_endpoint_subnet_id = module.network.pe_subnet_id
-  private_dns_zone_id        = module.network.private_dns_zone_ids["acr"]
-  log_analytics_id           = module.monitoring.workspace_id
-  tags                       = local.tags
-}
-
-# module "aks" {
-#   source                 = "./modules/aks"
-  name                   = "aks-${local.suffix}"
-  resource_group_name    = azurerm_resource_group.this.name
-  location               = var.location
   kubernetes_version     = var.aks_kubernetes_version
   subnet_id              = module.network.aks_subnet_id
   zones                  = var.availability_zones
@@ -83,25 +73,13 @@ module "infra" {
   user_vm_size           = var.aks_user_vm_size
   user_min_count         = var.aks_user_min_count
   user_max_count         = var.aks_user_max_count
-  log_analytics_id       = module.monitoring.workspace_id
-  acr_id                 = module.acr.id
-  tags                   = local.tags
 
-
-# module "postgres" {
-#   source                = "./modules/postgres"
-  name                  = "psql-${local.suffix}-${random_string.uniq.result}"
-  resource_group_name   = azurerm_resource_group.this.name
-  location              = var.location
-  delegated_subnet_id   = module.network.db_subnet_id
-  private_dns_zone_id   = module.network.private_dns_zone_ids["postgres"]
-  sku_name              = var.postgres_sku
-  storage_mb            = var.postgres_storage_mb
-  pg_version            = var.postgres_version
-  ha_enabled            = var.postgres_ha_enabled
-  tenant_id             = data.azurerm_client_config.current.tenant_id
-  admin_group_name      = var.postgres_admin_group_name
-  admin_group_object_id = var.postgres_admin_group_object_id
-  log_analytics_id      = module.monitoring.workspace_id
-  tags                  = local.tags
+  delegated_subnet_id                   = module.network.db_subnet_id
+  postgres_sku                          = var.postgres_sku
+  postgres_storage_mb                   = var.postgres_storage_mb
+  postgres_version                      = var.postgres_version
+  postgres_ha_enabled                   = var.postgres_ha_enabled
+  postgres_geo_redundant_backup_enabled = var.postgres_geo_redundant_backup_enabled
+  postgres_admin_group_name             = var.postgres_admin_group_name
+  postgres_admin_group_object_id        = var.postgres_admin_group_object_id
 }

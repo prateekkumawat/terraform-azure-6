@@ -1,15 +1,15 @@
 resource "azurerm_user_assigned_identity" "cluster" {
-  name                = "id-${var.name}"
+  name                = "id-${var.aks_name}"
   resource_group_name = var.resource_group_name
   location            = var.location
   tags                = var.tags
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
-  name                = var.name
+  name                = var.aks_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  dns_prefix          = var.name
+  dns_prefix          = var.aks_name
   kubernetes_version  = var.kubernetes_version
   sku_tier            = "Standard"
 
@@ -117,13 +117,13 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 
 # Kubelet identity pulls images from ACR
 resource "azurerm_role_assignment" "acr_pull" {
-  scope                            = var.acr_id
+  scope                            = azurerm_container_registry.this.id
   role_definition_name             = "AcrPull"
   principal_id                     = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_monitor_diagnostic_setting" "this" {
+resource "azurerm_monitor_diagnostic_setting" "aks" {
   name                       = "diag"
   target_resource_id         = azurerm_kubernetes_cluster.this.id
   log_analytics_workspace_id = var.log_analytics_id
@@ -134,5 +134,3 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   enabled_log { category = "cluster-autoscaler" }
   enabled_metric { category = "AllMetrics" }
 }
-
-
