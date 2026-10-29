@@ -1,4 +1,4 @@
-subscription_id = "00000000-0000-0000-0000-000000000000"
+subscription_id = "3978c96b-d2ca-4e91-99fb-423d8b50db6c"
 environment     = "dev"
 workload        = "app"
 location        = "centralindia"
@@ -10,16 +10,16 @@ subnet_cidrs = {
   pe  = "10.20.17.0/24"
 }
 
-aks_admin_group_object_ids = ["00000000-0000-0000-0000-000000000000"]
-aks_system_vm_size         = "Standard_D2s_v5"
-aks_user_vm_size           = "Standard_D2s_v5"
+aks_admin_group_object_ids = ["7350424f-908c-4f6a-b6c3-1c75b7f31517"]
+aks_system_vm_size         = "Standard_D2_v2"   #"Standard_D2ds_v5"
+aks_user_vm_size           = "Standard_D2_v2"   #"Standard_D2ds_v5"
 aks_user_min_count         = 1
 aks_user_max_count         = 3
 
-postgres_sku                   = "B_Standard_B2s"
+postgres_sku                   = "GP_Standard_D2s_v3"
 postgres_storage_mb            = 32768
 postgres_ha_enabled            = false
-postgres_admin_group_name      = "sg-db-admins"
-postgres_admin_group_object_id = "00000000-0000-0000-0000-000000000000"
+postgres_admin_group_name      = "grp-psql-app-dev-admins"
+postgres_admin_group_object_id = "c7333960-6b4c-4113-bcec-016edd6ff8c5"
 log_retention_days             = 30
 enable_resource_locks          = false

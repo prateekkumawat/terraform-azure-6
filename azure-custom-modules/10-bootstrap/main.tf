@@ -29,11 +29,12 @@ resource "azurerm_storage_container" "tfstate" {
   }
 }
 
-resource "azurerm_management_lock" "tfstate" {
-  name       = "protect-tfstate"
-  scope      = azurerm_resource_group.tfstate.id
-  lock_level = "CanNotDelete"
-  notes      = "Terraform state - do not delete"
-}
+# resource "azurerm_management_lock" "tfstate" {
+#   name       = "protect-tfstate"
+#   scope      = azurerm_resource_group.tfstate.id
+#   lock_level = "CanNotDelete"
+#   notes      = "Terraform state - do not delete"
 
+#   depends_on = [azurerm_storage_container.tfstate]
+# }
 

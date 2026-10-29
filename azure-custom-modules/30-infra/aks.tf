@@ -46,10 +46,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     vnet_subnet_id               = var.subnet_id
     zones                        = var.zones
     auto_scaling_enabled         = true
-    min_count                    = 3
-    max_count                    = 5
-    os_disk_type                 = "Ephemeral"
-    os_disk_size_gb              = 100
+    min_count                    = 1
+    max_count                    = 3
+    os_disk_type                 = "Managed" #"Ephemeral"
+    #os_disk_size_gb              = 80
     only_critical_addons_enabled = true
     temporary_name_for_rotation  = "systemtmp"
     max_pods                     = 110
@@ -103,8 +103,8 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   auto_scaling_enabled  = true
   min_count             = var.user_min_count
   max_count             = var.user_max_count
-  os_disk_type          = "Ephemeral"
-  os_disk_size_gb       = 100
+  os_disk_type          = "Managed"   #"Ephemeral"
+  #os_disk_size_gb       = 80
   mode                  = "User"
   max_pods              = 110
   node_labels           = { workload = "apps" }
